@@ -32,42 +32,42 @@ using namespace std::literals::string_view_literals;
 // ru_drivers
 unsigned HRNG::random_unix()
 {
-	// using random_engine = default_random_engine;
-	// using distribution = uniform_int_distribution<>;
+  // using random_engine = default_random_engine;
+  // using distribution = uniform_int_distribution<>;
 
-	unsigned int random_seed, random_seed_a{0}, random_seed_b, random_seed_c;
+  unsigned int random_seed, random_seed_a{0}, random_seed_b, random_seed_c;
 
-	ifstream file("/dev/random", std::ios::binary);
+  ifstream file("/dev/random", std::ios::binary);
 
-	if (file.is_open())
-	{
-		char *memblock;
-		int size = sizeof(int);
-		memblock = new char[size];
-		file.read(memblock, size);
-		file.close();
+  if (file.is_open())
+  {
+    char *memblock;
+    int size = sizeof(int);
+    memblock = new char[size];
+    file.read(memblock, size);
+    file.close();
 
-		random_seed_a = *reinterpret_cast<int *>(memblock);
+    random_seed_a = *reinterpret_cast<int *>(memblock);
 
-		delete[] memblock;
-	} // end if
+    delete[] memblock;
+  } // end if
 
-	// random_engine re{};
-	// distribution dist{0};
+  // random_engine re{};
+  // distribution dist{0};
 
-	random_seed_b = time(NULL);
+  random_seed_b = time(NULL);
 
-	// default_random_number;
-	srand((random_seed_b xor random_seed_a));
+  // default_random_number;
+  srand((random_seed_b xor random_seed_a));
 
-	random_seed_c = rand();
+  random_seed_c = rand();
 
-	random_seed = random_seed_a xor (random_seed_b xor random_seed_c);
-	std::cout << "random_seed_a\t= " << random_seed_a << std::endl;
-	std::cout << "random_seed_b\t= " << random_seed_b << std::endl;
-	std::cout << "random_seed_c\t= " << random_seed_c << std::endl;
-	std::cout << "random_seed\t= " << random_seed << std::endl;
-	return random_seed;
+  random_seed = random_seed_a xor (random_seed_b xor random_seed_c);
+  std::cout << "random_seed_a\t= " << random_seed_a << std::endl;
+  std::cout << "random_seed_b\t= " << random_seed_b << std::endl;
+  std::cout << "random_seed_c\t= " << random_seed_c << std::endl;
+  std::cout << "random_seed\t= " << random_seed << std::endl;
+  return random_seed;
 } // end good_seed()
 
 // https://stackoverflow.com/questions/2640717/c-generate-a-good-random-seed-for-psudo-random-number-generators
@@ -75,7 +75,18 @@ unsigned HRNG::random_unix()
 // ru_disk
 unsigned HRNG::free_disk_space(const string_view dir = "home"sv)
 {
-	std::error_code ec;
-	const std::filesystem::space_info si = std::filesystem::space(dir, ec);
-	return si.free;
+// https://docs.microsoft.com/en-us/cpp/standard-library/filesystem?view=msvc-170
+// https://en.cppreference.com/w/cpp/filesystem
+// https://en.cppreference.com/w/cpp/filesystem/space
+// https://en.cppreference.com/w/cpp/filesystem/space_info
+// https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getdiskfreespaceexa
+// https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getdiskfreespacea
+// https://stackoverflow.com/questions/1449055/disk-space-used-free-total-how-do-i-get-this-in-c
+// https://www.unix.com/programming/30342-how-get-free-disk-space-size-c-c-program-solaris-system.html
+
+// https://duckduckgo.com/?t=ffab&q=c%2B%2B+indirect+function+call&ia=web
+https: // en.cppreference.com/w/cpp/utility/integer_sequence
+  std::error_code ec;
+  const std::filesystem::space_info si = std::filesystem::space(dir, ec);
+  return si.free;
 }
